@@ -1,8 +1,7 @@
 import { Container } from 'react-bootstrap';
 import { SignUp } from '../components/SignUp';
 
-export const SignUpPage: React.FC = () => { 
-
+export const SignUpPage: React.FC = () => {
   return (
     <Container
     className="d-flex align-items-center justify-content-center"
