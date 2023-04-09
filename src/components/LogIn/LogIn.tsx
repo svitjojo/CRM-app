@@ -122,75 +122,75 @@ export const LogIn: React.FC = () => {
   };
 
   return <>
-        <Card className="mb-4">
-            <Card.Body>
-                <h2 className="text-center mb-3">Log In</h2>
-                {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
-                <Form onSubmit={onSubmit}>
-                    <Form.Group className="mb-2">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            type="email"
-                            value={email}
-                            onChange={handlerEmail}
-                            required
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-4">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={password}
-                            onChange={handlerPassword}
-                            required
-                        />
-                    </Form.Group>
-                    {/* <Form.Group id="password-confirm" className="mb-4">
+    <Card className="mb-4">
+      <Card.Body>
+        <h2 className="text-center mb-3">Log In</h2>
+        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+        <Form onSubmit={onSubmit}>
+          <Form.Group className="mb-2">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              value={email}
+              onChange={handlerEmail}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-4">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              value={password}
+              onChange={handlerPassword}
+              required
+            />
+          </Form.Group>
+          {/* <Form.Group id="password-confirm" className="mb-4">
                         <Form.Label>Password Confirmation</Form.Label>
                         <Form.Control type="password" ref={passwordConfirmRef} required/>
                     </Form.Group> */}
-                    {/* <Form.Group className="mb-4">
+          {/* <Form.Group className="mb-4">
                         <Form.Label>Phone</Form.Label>
                         <Form.Control type="tel" required />
                     </Form.Group> */}
-                    <Button type='submit' className="w-100" disabled={authing}>Log In</Button>
-                </Form>
-            </Card.Body>
-        </Card>
-        <div className="w100 text-center mb-3">
-            Don&apos;t have an account?
-            <Link to={'/registration'}>
-                <span className="ml-1">Sign Up</span>
-            </Link>
-        </div>
-        <div id="recaptcha-container"></div>
-        <div className="d-flex align-items-center justify-content-center mb-3">
-            <div className="col"><hr /></div>
-            <div className="col-auto">OR</div>
-            <div className="col"><hr /></div>
-        </div>
-        <Button
-            onClick={() => { signInWithGoogle(); }}
-            disabled={authing}
-            className="d-flex align-items-center justify-content-center w-100 mb-2"
-        >
-            <GoogleIcon className="mr-3" />
-            Continue with Google
-        </Button>
-        <Button
-            onClick={() => { signInWithFacebook(); }}
-            disabled={authing}
-            className="d-flex align-items-center justify-content-center w-100 mb-2"
-        >
-            <FaceBookIcon className="mr-3" />
-            Continue with Facebook
-        </Button>
-        {/* <Button
+          <Button type='submit' className="w-100" disabled={authing}>Log In</Button>
+        </Form>
+      </Card.Body>
+    </Card>
+    <div className="w100 text-center mb-3">
+      Don&apos;t have an account?
+      <Link to={'/registration'}>
+        <span className="ml-1">Sign Up</span>
+      </Link>
+    </div>
+    <div id="recaptcha-container"></div>
+    <div className="d-flex align-items-center justify-content-center mb-3">
+      <div className="col"><hr /></div>
+      <div className="col-auto">OR</div>
+      <div className="col"><hr /></div>
+    </div>
+    <Button
+      onClick={() => { signInWithGoogle(); }}
+      disabled={authing}
+      className="d-flex align-items-center justify-content-center w-100 mb-2"
+    >
+      <GoogleIcon className="mr-3" />
+      Continue with Google
+    </Button>
+    <Button
+      onClick={() => { signInWithFacebook(); }}
+      disabled={authing}
+      className="d-flex align-items-center justify-content-center w-100 mb-2"
+    >
+      <FaceBookIcon className="mr-3" />
+      Continue with Facebook
+    </Button>
+    {/* <Button
             // onClick={() => signInWithPhone()}
             disabled={authing}
             className="d-flex align-items-center justify-content-center w-100"
         >
             Continue with Phone
         </Button>     */}
-    </>;
-}
+  </>;
+};

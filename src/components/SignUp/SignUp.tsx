@@ -78,64 +78,67 @@ export const SignUp: React.FC = () => {
     setErrorMessage('');
   };
 
-  return <>
-        <Card className="mb-4">
-            <Card.Body>
-                <h2 className="text-center mb-3">Sign Up</h2>
-                {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
-                <Form onSubmit={onSubmit}>
-                    <Form.Group className="mb-2">
-                        <Form.Label>Full Name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={fullName}
-                            onChange={handlerFullName}
-                            required
-                        />
-                    </Form.Group>
-                    {/* <Form.Group className="mb-3">
-                      <Form.Label>Sex :</Form.Label>
-                      <div className="d-flex justify-content-around">
-                        <Form.Check type="radio" label="Male" name='1' />
-                      <Form.Check type="radio" label="Female" name='1' />
-                      <Form.Check type="radio" label="Other" name='1'/>
-                      </div>
-                    </Form.Group> */}
-                    <Form.Group className="mb-2">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            type="email"
-                            value={email}
-                            onChange={handlerEmail}
-                            required
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-2">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={password}
-                            onChange={handlerPassword}
-                            required
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-4">
-                        <Form.Label>Password Confirmation</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={confirmPassword}
-                            onChange={handlerConfirmPassword}
-                            required
-                        />
-                    </Form.Group>
-                    {/* <Form.Group className="mb-4">
-                        <Form.Label>Phone</Form.Label>
-                        <Form.Control type="tel" required />
-                    </Form.Group> */}
-                    <Button type='submit' className="w-100" disabled={authing}>Sign Up</Button>
-                </Form>
-            </Card.Body>
-        </Card>
-        <div id="recaptcha-container"></div>
-    </>;
+  return (
+    <>
+      <Card className="mb-4">
+        <Card.Body>
+          <h2 className="text-center mb-3">Sign Up</h2>
+          {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+          <Form onSubmit={onSubmit}>
+            <Form.Group className="mb-2">
+              <Form.Label>Full Name</Form.Label>
+              <Form.Control
+                  type="text"
+                  value={fullName}
+                  onChange={handlerFullName}
+                  required
+              />
+            </Form.Group>
+            {/* <Form.Group className="mb-3">
+              <Form.Label>Sex :</Form.Label>
+              <div className="d-flex justify-content-around">
+                <Form.Check type="radio" label="Male" name='1' />
+              <Form.Check type="radio" label="Female" name='1' />
+              <Form.Check type="radio" label="Other" name='1'/>
+              </div>
+            </Form.Group> */}
+            <Form.Group className="mb-2">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                  type="email"
+                  value={email}
+                  onChange={handlerEmail}
+                  required
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                  type="password"
+                  value={password}
+                  onChange={handlerPassword}
+                  required
+              />
+            </Form.Group>
+            <Form.Group className="mb-4">
+              <Form.Label>Password Confirmation</Form.Label>
+              <Form.Control
+                  type="password"
+                  value={confirmPassword}
+                  onChange={handlerConfirmPassword}
+                  required
+              />
+            </Form.Group>
+            {/* <Form.Group className="mb-4">
+                <Form.Label>Phone</Form.Label>
+                <Form.Control type="tel" required />
+            </Form.Group> */}
+            <Button type='submit' className="w-100" disabled={authing}>Sign Up</Button>
+          </Form>
+        </Card.Body>
+      </Card>
+      {/* <Button>Back to Log In</Button> */}
+      <div id="recaptcha-container"></div>
+    </>
+  );
 };
