@@ -1,0 +1,39 @@
+.sidebar {
+  transition: width 0.5s;
+}
+
+.nav__link {
+  transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+}
+
+.active-link {
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    background: #007bff;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    border-radius: 0 3px 3px 0;
+
+    &:hover {
+      background-color: #fff;
+    }
+  }
+}
+
+.logo {
+  transition: transform 0.3s, width 0.3s;
+  width: 50%;
+
+  &-hidden {
+    width: 0%;
+    transform: translateX(-100px);
+  }
+}
