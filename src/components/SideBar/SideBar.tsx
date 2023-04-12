@@ -1,37 +1,43 @@
-import { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import cn from 'classnames';
-import { FiHome, FiEdit, FiMessageSquare } from 'react-icons/fi';
+import { auth } from '../../firebase';
+import { signOut } from 'firebase/auth';
+
+import { Button, Container } from 'react-bootstrap';
+import { FiHome, FiEdit, FiMessageSquare, FiLogOut } from 'react-icons/fi';
 import { FaBus, FaRegCalendar } from 'react-icons/fa';
 import { ImEarth } from 'react-icons/im';
 import { MdKeyboardDoubleArrowLeft } from 'react-icons/md';
 import './SideBar.scss';
-import { auth } from '../../firebase';
+import { Header } from '../Header';
 
 interface Props {
   children: React.ReactNode
 }
 
 export const SideBar: React.FC<Props> = ({ children }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(true);
+  const location = useLocation();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        setIsAdmin(user.uid === 'hRVYVeVMMXVSBqitlXdxI1scSPj2');
+        setIsAdmin(user.email === 'yevhen.sukhostavskyi@gmail.com');
       }
     });
 
     return () => { unsubscribe(); };
   }, []);
 
-  const handlerSideBar = (): void => {
+  const handlerSideBar = useCallback((): void => {
     setIsOpen(!isOpen);
-  };
+    setIsAdmin(true);
+  }, [isOpen]);
 
   return (
-    <div className='wrapper vh-100 d-flex'>
+    <div className='flex-fill wrapper d-flex'>
       <aside className="sidebar border-right" style={{ width: isOpen ? '200px' : '58px' }}>
         <div className="top_section border-bottom p-2 mb-3 d-flex justify-content-between align-items-center">
           <Link
@@ -50,28 +56,17 @@ export const SideBar: React.FC<Props> = ({ children }) => {
           </button>
         </div>
         <nav className='overflow-hidden'>
-          <div className="">
+          <div>
             <NavLink
             to={'/home'}
-            className={({ isActive }) => cn('position-relative d-flex align-items-center p-2 mb-3 nav__link rounded text-decoration-none', {
-              'active-link': isActive
+            className={cn('position-relative d-flex align-items-center p-2 mb-3 nav__link rounded text-decoration-none', {
+              'active-link': location.pathname === '/'
             })}
           >
             <div className="mr-3 ml-2">
               <FiHome size={'1.6rem'}/>
             </div>
             Home
-          </NavLink>
-          <NavLink
-            to={'/trips'}
-            className={({ isActive }) => cn('position-relative d-flex align-items-center p-2 mb-3 nav__link rounded text-decoration-none', {
-              'active-link': isActive
-            })}
-          >
-            <div className="mr-3 ml-2">
-              <FaBus size={'1.6rem'}/>
-            </div>
-            Trips
           </NavLink>
           <NavLink
             to={'/calendar'}
@@ -96,33 +91,52 @@ export const SideBar: React.FC<Props> = ({ children }) => {
               Message
           </NavLink>
             {isAdmin && (
-              <NavLink
-                to={'/editing'}
-                className={({ isActive }) => cn('position-relative d-flex align-items-center p-2 mb-3 nav__link rounded text-decoration-none text-nowrap', {
-                  'active-link': isActive
-                })}
-              >
-                <div className="mr-3 ml-2">
-                  <FiEdit size={'1.6rem'}/>
-                </div>
-                Editing users
-              </NavLink>
+              <>
+                <NavLink
+                  to={'/trips'}
+                  className={({ isActive }) => cn('position-relative d-flex align-items-center p-2 mb-3 nav__link rounded text-decoration-none', {
+                    'active-link': isActive
+                  })}
+                >
+                  <div className="mr-3 ml-2">
+                    <FaBus size={'1.6rem'}/>
+                  </div>
+                  Trips
+                </NavLink>
+                <NavLink
+                  to={'/editing'}
+                  className={({ isActive }) => cn('position-relative d-flex align-items-center p-2 mb-3 nav__link rounded text-decoration-none text-nowrap', {
+                    'active-link': isActive
+                  })}
+                >
+                  <div className="mr-3 ml-2">
+                    <FiEdit size={'1.6rem'}/>
+                  </div>
+                  Editing users
+                </NavLink>
+              </>
             )}
           </div>
-          <NavLink
-            to={'/account'}
-            className={({ isActive }) => cn('position-relative d-flex align-items-center p-2 nav__link rounded text-decoration-none', {
-              'active-link': isActive
-            })}
+          <Button
+            variant='secondary'
+            onClick={() => { signOut(auth); }}
+            className='w-100 d-flex p-2 text-nowrap'
           >
             <div className="mr-3 ml-2">
-              <FiEdit size={'1.6rem'}/>
+              <FiLogOut size={'1.6rem'} className='mr-2'/>
             </div>
-            Account
-          </NavLink>
+            <span>Log Out</span>
+          </Button>
         </nav>
       </aside>
-      <main className='flex-fill'>{children}</main>
+      <main className='flex-fill'>
+        <>
+          <Header />
+          <Container>
+            {children}
+          </Container>
+        </>
+      </main>
     </div>
   );
 };

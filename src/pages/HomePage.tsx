@@ -1,12 +1,9 @@
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebase';
-import { Button } from 'react-bootstrap';
+import { SideBar } from '../components/SideBar';
 
 export const HomePage: React.FC = () => {
   return (
-    <>
-      Home
-      <Button onClick={() => { signOut(auth); }}>Sign Out</Button>
-    </>
+    <SideBar>
+      <h2 className="mt-4 text-center">Home Page</h2>
+    </SideBar>
   );
 };

@@ -8,3 +8,19 @@ button {
   cursor: pointer;
   outline: none;
 }
+
+html, body {
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+@media (max-width: 576px) {
+  table {
+    overflow-x: auto;
+  }
+}

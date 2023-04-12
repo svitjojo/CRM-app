@@ -5,9 +5,7 @@ export const Header: React.FC = () => {
   const location = useLocation();
   let headerText = location.pathname.slice(1);
 
-  if (headerText === 'login'
-    || headerText === 'registration'
-    || headerText === '') {
+  if (headerText === '') {
     headerText = 'home';
   }
 

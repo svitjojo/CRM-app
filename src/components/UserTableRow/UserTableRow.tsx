@@ -1,17 +1,19 @@
 import { type FormEvent, useCallback, useState } from 'react';
-import { type UserData } from '../../pages/EditingUser';
+import { type User } from '../../types/User';
 import { Button, Form } from 'react-bootstrap';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { toast } from 'react-toastify';
 
 interface Props {
-  user: UserData
+  user: User
 }
 
 export const UserTableRow: React.FC<Props> = ({ user }) => {
-  const { role, full_name: fullName, photo_url: photo, id } = user;
+  const { role, full_name: fullName, id, sex } = user;
+
   const [newRole, setNewRole] = useState<string>(role);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const updateUserRole = async (id: string): Promise<void> => {
     try {
@@ -38,19 +40,20 @@ export const UserTableRow: React.FC<Props> = ({ user }) => {
   const handleSubmit = useCallback((event: FormEvent) => {
     event.preventDefault();
 
-    if (role !== newRole) {
-      updateUserRole(id);
-    }
+    updateUserRole(id);
+    setIsButtonDisabled(true);
   }, [newRole, role]);
 
   const handleNewRole = useCallback((
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setNewRole(event.target.value);
+    setIsButtonDisabled(false);
   }, []);
 
   return (
     <tr key={user.id}>
+      <td>{id}</td>
       <td>{fullName}</td>
       <td>
         <Form onSubmit={handleSubmit} className='d-flex align-items-center'>
@@ -66,13 +69,12 @@ export const UserTableRow: React.FC<Props> = ({ user }) => {
           <Button
             size='sm'
             type='submit'
-            disabled={role === newRole}
-            style={{ cursor: role !== newRole ? 'pointer' : 'default' }}
+            disabled={isButtonDisabled}
+            style={{ cursor: !isButtonDisabled ? 'pointer' : 'default' }}
           >Save</Button>
         </Form>
       </td>
-      <td>{photo}</td>
-      <td>{photo}</td>
+      <td>{sex}</td>
     </tr>
   );
 };

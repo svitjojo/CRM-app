@@ -3,71 +3,69 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   FacebookAuthProvider,
-  fetchSignInMethodsForEmail
-  // RecaptchaVerifier,
-  // signInWithPhoneNumber,
+  fetchSignInMethodsForEmail,
+  type ConfirmationResult
 } from 'firebase/auth';
-import { useState } from 'react';
-import { Form, Button, Card, Alert } from 'react-bootstrap';
+import { type FormEvent, useCallback, useState } from 'react';
+import { Form, Button, Card, Alert, InputGroup } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { ReactComponent as GoogleIcon } from '../../icons/google-icon.svg';
-import { ReactComponent as FaceBookIcon } from '../../icons/facebook-icon.svg';
+import { FaPhoneAlt, FaFacebookF } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
 import { auth } from '../../firebase';
 import { FirebaseError } from 'firebase/app';
-
-// declare global {
-//   interface Window {
-//       recaptchaVerifier: RecaptchaVerifier;
-//       recaptchaWidgetId: number;
-//   }
-// }
+import { phoneRex } from '../../utils/regExp';
+import { sendUserDataToDB } from '../../api/DBFunctions';
+import { setUpRecaptcha } from '../../api/userApi';
 
 export const LogIn: React.FC = () => {
-  const navigate = useNavigate();
   const [authing, setAuthing] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [tel, setTel] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [confirmObj, setConfirmObj] = useState<ConfirmationResult | null>(null);
+  const [verificationCode, setVerificationCode] = useState<string>('');
+  const [isCaptchaVisible, setIsCaptchaVisible] = useState<boolean>(true);
+  const [isValidPhone, setIsValidPhone] = useState<boolean>(false);
+  const [phoneAuthing, setPhoneAuthing] = useState<boolean>(false);
+  const navigate = useNavigate();
 
-  const emailRex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-
-  const signInByEmailAndPassword = async (email: string, password: string): Promise<void> => {
-    setAuthing(true);
-
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/');
-    } catch (error) {
-      setErrorMessage('Email or password are invalid');
-      setAuthing(false);
-    }
-  };
-
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+  const onSubmit = useCallback((event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    if (emailRex.test(email)) {
-      signInByEmailAndPassword(email, password);
-    } else {
-      setErrorMessage('Email is invalid');
-    }
-  };
 
-  const signInWithGoogle = async (): Promise<void> => {
+    const signInByEmailAndPassword = async (email: string, password: string): Promise<void> => {
+      setAuthing(true);
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        navigate('/');
+      } catch (error) {
+        setErrorMessage('Email or password are invalid');
+        setAuthing(false);
+      }
+    };
+
+    signInByEmailAndPassword(email, password);
+  }, [email, password]);
+
+  const signInWithGoogle = useCallback(async (): Promise<void> => {
     setAuthing(true);
 
     try {
       await signInWithPopup(auth, new GoogleAuthProvider());
-      navigate('/');
-    } catch (error) {
+
+      navigate('/home');
+    } catch {
       setAuthing(false);
     }
-  };
+  }, []);
 
-  const signInWithFacebook = async (): Promise<void> => {
+  const signInWithFacebook = useCallback(async (): Promise<void> => {
     setAuthing(true);
 
     try {
       await signInWithPopup(auth, new FacebookAuthProvider());
+
       navigate('/');
     } catch (error) {
       if (error instanceof FirebaseError) {
@@ -80,46 +78,55 @@ export const LogIn: React.FC = () => {
       }
       setAuthing(false);
     }
-  };
+  }, []);
 
-  // try {
-  //     const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-  //     'size': 'invisible',
-  //     'callback': (response: Response) => {
-  //         // reCAPTCHA solved, allow signInWithPhoneNumb
-  //         console.log(response);
-  //     }
-  //     }, auth);
+  const getOtp = useCallback(async (): Promise<void> => {
+    try {
+      setPhoneAuthing(true);
+      const response = await setUpRecaptcha(tel);
 
-  //     window.recaptchaVerifier = recaptchaVerifier;
-  // } catch (error) {
-  //     console.log(error.message);
-  // }
+      setConfirmObj(response);
+      setIsCaptchaVisible(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      }
+      setPhoneAuthing(false);
+    }
+  }, [tel]);
 
-  // const signInWithPhone = async () => {
-  //     try {
-  //         const phoneNumber = "+380981314187";
-  //         const appVerifier = window.recaptchaVerifier;
-  //         const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
-  //         const verificationCode = window.prompt('Please enter the verification code sent to your phone');
+  const verifyOtp = useCallback(async (): Promise<void> => {
+    try {
+      if (confirmObj) {
+        await confirmObj.confirm(verificationCode);
+        await sendUserDataToDB('', '', '', 'other', 'passenger');
+        navigate('/');
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      }
+    }
+  }, [confirmObj, verificationCode]);
 
-  //         if (verificationCode) {
-  //             return confirmationResult.confirm(verificationCode);
-  //         }
-  //     } catch (error) {
-  //         console.log(error);
-  //     }
-  //  };
-
-  const handlerEmail = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handlerEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>): void => {
     setEmail(e.target.value);
     setErrorMessage('');
-  };
+  }, []);
 
-  const handlerPassword = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handlerPassword = useCallback((e: React.ChangeEvent<HTMLInputElement>): void => {
     setPassword(e.target.value);
     setErrorMessage('');
-  };
+  }, []);
+
+  const handlerTel = useCallback((e: React.ChangeEvent<HTMLInputElement>): void => {
+    if (!Number.isNaN(+e.target.value)) {
+      setTel(e.target.value);
+      setIsValidPhone(phoneRex.test(e.target.value));
+    }
+
+    setErrorMessage('');
+  }, []);
 
   return <>
     <Card className="mb-4">
@@ -145,14 +152,6 @@ export const LogIn: React.FC = () => {
               required
             />
           </Form.Group>
-          {/* <Form.Group id="password-confirm" className="mb-4">
-                        <Form.Label>Password Confirmation</Form.Label>
-                        <Form.Control type="password" ref={passwordConfirmRef} required/>
-                    </Form.Group> */}
-          {/* <Form.Group className="mb-4">
-                        <Form.Label>Phone</Form.Label>
-                        <Form.Control type="tel" required />
-                    </Form.Group> */}
           <Button type='submit' className="w-100" disabled={authing}>Log In</Button>
         </Form>
       </Card.Body>
@@ -163,7 +162,6 @@ export const LogIn: React.FC = () => {
         <span className="ml-1">Sign Up</span>
       </Link>
     </div>
-    <div id="recaptcha-container"></div>
     <div className="d-flex align-items-center justify-content-center mb-3">
       <div className="col"><hr /></div>
       <div className="col-auto">OR</div>
@@ -174,23 +172,55 @@ export const LogIn: React.FC = () => {
       disabled={authing}
       className="d-flex align-items-center justify-content-center w-100 mb-2"
     >
-      <GoogleIcon className="mr-3" />
+      <FcGoogle className="mr-3" />
       Continue with Google
     </Button>
     <Button
       onClick={() => { signInWithFacebook(); }}
       disabled={authing}
-      className="d-flex align-items-center justify-content-center w-100 mb-2"
+      className="d-flex align-items-center justify-content-center w-100 mb-3"
     >
-      <FaceBookIcon className="mr-3" />
+      <FaFacebookF className="mr-3" />
       Continue with Facebook
     </Button>
-    {/* <Button
-            // onClick={() => signInWithPhone()}
-            disabled={authing}
-            className="d-flex align-items-center justify-content-center w-100"
+    <p>Please enter a phone number to Log in with phone :</p>
+    <InputGroup className="mb-2">
+      <InputGroup.Text style={{ borderRadius: 0 }} className='rounded-left'>Tel :</InputGroup.Text>
+      <Form.Control
+        type="tel"
+        value={tel}
+        className='border-left-0'
+        onChange={handlerTel}
+        placeholder='exp: 380123456789'
+        required
+      />
+    </InputGroup>
+    <Button
+      onClick={() => { getOtp(); }}
+      disabled={!isValidPhone || phoneAuthing}
+      className="d-flex align-items-center justify-content-center w-100 mb-3"
+    >
+      <FaPhoneAlt className="mr-3" />
+      Continue with Phone
+    </Button>
+    {isCaptchaVisible && <div id='recaptcha-container'></div>}
+    {!!confirmObj && (
+      <>
+        <Form.Group className="mb-4 mt-3">
+          <Form.Label>Please enter your code: </Form.Label>
+          <Form.Control
+            type="text"
+            value={verificationCode}
+            onChange={(e) => { setVerificationCode(e.target.value); }}
+          />
+        </Form.Group>
+        <Button
+          onClick={() => { verifyOtp(); }}
+          className="d-flex align-items-center justify-content-center w-100"
         >
-            Continue with Phone
-        </Button>     */}
+          Verify
+        </Button>
+      </>
+    )}
   </>;
 };

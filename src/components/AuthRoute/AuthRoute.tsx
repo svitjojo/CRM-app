@@ -12,10 +12,9 @@ export const AuthRoute: React.FC<Props> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const AuthCheck = onAuthStateChanged(auth, (user) => {
-    if (user != null) {
+    if (user !== null) {
       setLoading(false);
     } else {
-      console.log('unauthorized');
       navigate('/login');
     }
   });
