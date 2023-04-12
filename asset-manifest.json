@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/CRM-app/static/css/main.4880ea2f.css",
+    "main.js": "/CRM-app/static/js/main.3ebf21c6.js",
+    "index.html": "/CRM-app/index.html",
+    "main.4880ea2f.css.map": "/CRM-app/static/css/main.4880ea2f.css.map",
+    "main.3ebf21c6.js.map": "/CRM-app/static/js/main.3ebf21c6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4880ea2f.css",
+    "static/js/main.3ebf21c6.js"
+  ]
+}
