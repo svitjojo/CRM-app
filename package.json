@@ -1,12 +1,9 @@
 {
   "name": "crm-app",
   "version": "0.1.0",
+  "homepage": "https://svitjojo.github.io/CRM-app",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
     "@types/node": "^16.18.23",
     "bootstrap": "^4.6.0",
     "classnames": "^2.3.2",
@@ -25,6 +22,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "style": "npx eslint src --fix"
@@ -58,6 +56,7 @@
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
+    "gh-pages": "^5.0.0",
     "typescript": "^5.0.4"
   }
 }

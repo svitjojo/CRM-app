@@ -1,28 +1,23 @@
-import { collection, getDocs } from 'firebase/firestore';
 import { Table } from 'react-bootstrap';
-import { db } from '../firebase';
 import { useEffect, useState } from 'react';
 import { UserTableRow } from '../components/UserTableRow';
 import { SideBar } from '../components/SideBar';
 import { type User } from '../types/User';
+import { getUsers } from '../api/DBFunctions';
 
 export const EditingUser: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const usersCollectionRef = collection(db, 'users');
 
   useEffect(() => {
-    const getUsers = async (): Promise<void> => {
+    (async () => {
       try {
-        const data = await getDocs(usersCollectionRef);
-        const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as User[];
+        const usersData = await getUsers();
 
-        setUsers(filteredData);
+        setUsers(usersData);
       } catch (error) {
         console.log(error);
       }
-    };
-
-    getUsers();
+    })();
   }, []);
 
   return (

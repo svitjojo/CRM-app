@@ -24,7 +24,7 @@ export const SideBar: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        setIsAdmin(user.email === 'yevhen.sukhostavskyi@gmail.com');
+        setIsAdmin(user.email === 'test123@test.com');
       }
     });
 

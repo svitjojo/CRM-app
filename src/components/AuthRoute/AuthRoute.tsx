@@ -23,7 +23,9 @@ export const AuthRoute: React.FC<Props> = ({ children }) => {
     AuthCheck();
   }, [AuthCheck]);
 
-  if (loading) return <p>loading ...</p>;
+  if (loading) {
+    return <p>Loading ...</p>;
+  };
 
   return <>{children}</>;
 };
