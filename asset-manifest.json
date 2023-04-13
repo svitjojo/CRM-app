@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/CRM-app/static/css/main.4880ea2f.css",
-    "main.js": "/CRM-app/static/js/main.3ebf21c6.js",
+    "main.js": "/CRM-app/static/js/main.eed49842.js",
     "index.html": "/CRM-app/index.html",
     "main.4880ea2f.css.map": "/CRM-app/static/css/main.4880ea2f.css.map",
-    "main.3ebf21c6.js.map": "/CRM-app/static/js/main.3ebf21c6.js.map"
+    "main.eed49842.js.map": "/CRM-app/static/js/main.eed49842.js.map"
   },
   "entrypoints": [
     "static/css/main.4880ea2f.css",
-    "static/js/main.3ebf21c6.js"
+    "static/js/main.eed49842.js"
   ]
 }
