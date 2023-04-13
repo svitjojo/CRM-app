@@ -13,7 +13,7 @@ This project is built using:
 ## Installation
 To install and run the project locally, follow these steps:
 
-Clone the repository: `git clone https://github.com/yourusername/passenger-transportation-crm.git`
+Clone the repository: `git clone https://github.com/svitjojo/CRM-app.git`
 Install dependencies: `npm install`
 Create a Firebase project and Firebase configuration in .env file.
 Run the project: `npm start`
