@@ -22,6 +22,7 @@ Create a Firebase project and Firebase copy configuration in .env file. Example:
 - REACT_APP_STORAGE_BUCKET=storageBucket<br/>
 - REACT_APP_MESSAGING_SENDER_ID=messagingSenderId<br/>
 - REACT_APP_APP_ID=appId<br/>
+
 Run the project: `npm start`<br/>
 
 ## Features
