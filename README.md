@@ -14,8 +14,11 @@ This project is built using:
 To install and run the project locally, follow these steps:
 
 Clone the repository: `git clone https://github.com/svitjojo/CRM-app.git`
+<br/ >
 Install dependencies: `npm install`
+<br/ >
 Create a Firebase project and Firebase configuration in .env file.
+<br/ >
 Run the project: `npm start`
 
 ## Features
