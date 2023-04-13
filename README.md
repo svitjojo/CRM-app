@@ -1,5 +1,6 @@
 # Passenger Transportation CRM
-This is a small CRM application for managing passenger transportation. It includes multiple user roles such as passengers, drivers, and dispatchers.
+This is a small CRM application for managing passenger transportation. It includes multiple user roles such as passengers, drivers, and dispatchers.<br/>
+[DEMO](https://svitjojo.github.io/CRM-app/)
 
 ## Technologies
 This project is built using:
